@@ -52,10 +52,10 @@ with st.sidebar:
         st.error("File failed to load. Please select a valid CSV file.")
         print("File failed to load.\n" + str(e))
     # Radio buttons for dataset choice
-    chosen_dataset = dataset_container.radio(":bar_chart: Choose your data:",datasets.keys(),index=index_no)#,horizontal=True,)
+    chosen_dataset = dataset_container.radio(":bar_chart: Choisis tes données:",datasets.keys(),index=index_no)#,horizontal=True,)
 
     # Check boxes for model choice
-    st.write(":brain: Choose your model(s):")
+    st.write(":brain: Choisis ton modèle:")
     # Keep a dictionary of whether models are selected or not
     use_model = {}
     for model_desc,model_name in available_models.items():
@@ -64,7 +64,7 @@ with st.sidebar:
         use_model[model_desc] = st.checkbox(label,value=True,key=key)
  
  # Text area for query
-question = st.text_area(":eyes: What would you like to visualise?",height=10)
+question = st.text_area(":eyes: Que veux-tu visualiser ?",height=10)
 go_btn = st.button("Go...")
 
 # Make a list of the models which have been selected

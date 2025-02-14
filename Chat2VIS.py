@@ -10,8 +10,7 @@ st.set_option('deprecation.showPyplotGlobalUse', False)
 
 st.markdown("<h1 style='text-align: center; font-weight:bold; font-family:comic sans ms; padding-top: 0rem;'> \
             Data Visualisation - POC</h1>", unsafe_allow_html=True)
-st.markdown("<h2 style='text-align: center;padding-top: 0rem;'>Creating Visualisations using Natural Language \
-            with ChatGPT</h2>", unsafe_allow_html=True)
+st.markdown("<h2 style='text-align: center;padding-top: 0rem;'>Créer des visuels en langage naturel</h2>", unsafe_allow_html=True)
 
 available_models = {"ChatGPT-4": "gpt-4",
                         "GPT-3.5 Instruct": "gpt-3.5-turbo-instruct"}
@@ -33,7 +32,7 @@ else:
     datasets = st.session_state["datasets"]
 
 key_col1,key_col2 = st.columns(2)
-openai_key = key_col1.text_input(label = ":key: OpenAI Key:", help="Required for ChatGPT-4, GPT-3.5 Instruct.",type="password")
+openai_key = st.secrets["OPENAI"]
 
 with st.sidebar:
     # First we want to choose the dataset, but we will fill it with choices once we've loaded one
@@ -41,7 +40,7 @@ with st.sidebar:
 
     # Add facility to upload a dataset
     try:
-        uploaded_file = st.file_uploader(":computer: Load a CSV file:", type="csv")
+        uploaded_file = st.file_uploader(":computer: Charger un fichier CSV:", type="csv")
         index_no=0
         if uploaded_file:
             # Read in the data, add it to the list of available datasets. Give it a nice name.
@@ -63,7 +62,6 @@ with st.sidebar:
         label = f"{model_desc} ({model_name})"
         key = f"key_{model_desc}"
         use_model[model_desc] = st.checkbox(label,value=True,key=key)
-    st.info("Note: Upgrade of Code Llama model is causing failures in plot generation. Fix under investigation...")
  
  # Text area for query
 question = st.text_area(":eyes: What would you like to visualise?",height=10)

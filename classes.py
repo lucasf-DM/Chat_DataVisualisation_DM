@@ -7,7 +7,7 @@
 import openai
 from langchain import HuggingFaceHub, LLMChain,PromptTemplate
 
-def run_request(question_to_ask, model_type, key, alt_key):
+def run_request(question_to_ask, model_type, key):
     if model_type == "gpt-4" or model_type == "gpt-3.5-turbo" :
         # Run OpenAI ChatCompletion API
         task = "Generate Python Code Script."
@@ -24,12 +24,6 @@ def run_request(question_to_ask, model_type, key, alt_key):
         response = openai.Completion.create(engine=model_type,prompt=question_to_ask,temperature=0,max_tokens=500,
                     top_p=1.0,frequency_penalty=0.0,presence_penalty=0.0,stop=["plt.show()"])
         llm_response = response["choices"][0]["text"] 
-    else:
-        # Hugging Face model
-        llm = HuggingFaceHub(huggingfacehub_api_token = alt_key, repo_id="codellama/" + model_type, model_kwargs={"temperature":0.1, "max_new_tokens":500})
-        llm_prompt = PromptTemplate.from_template(question_to_ask)
-        llm_chain = LLMChain(llm=llm,prompt=llm_prompt)
-        llm_response = llm_chain.predict()
     # rejig the response
     llm_response = format_response(llm_response)
     return llm_response

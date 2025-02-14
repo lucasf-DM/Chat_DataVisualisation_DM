@@ -1,9 +1,3 @@
-#################################################################################
-# Chat2VIS 
-# https://chat2vis.streamlit.app/
-# Paula Maddigan
-#################################################################################
-
 import pandas as pd
 import openai
 import streamlit as st
@@ -12,19 +6,15 @@ from classes import get_primer,format_question,run_request
 import warnings
 warnings.filterwarnings("ignore")
 st.set_option('deprecation.showPyplotGlobalUse', False)
-st.set_page_config(page_icon="chat2vis.png",layout="wide",page_title="Chat2VIS")
 
 
 st.markdown("<h1 style='text-align: center; font-weight:bold; font-family:comic sans ms; padding-top: 0rem;'> \
-            Chat2VIS</h1>", unsafe_allow_html=True)
+            Data Visualisation - POC</h1>", unsafe_allow_html=True)
 st.markdown("<h2 style='text-align: center;padding-top: 0rem;'>Creating Visualisations using Natural Language \
-            with ChatGPT and Code Llama</h2>", unsafe_allow_html=True)
+            with ChatGPT</h2>", unsafe_allow_html=True)
 
-st.sidebar.markdown('</a> Developed by Paula Maddigan <a style="text-align: center;padding-top: 0rem;" href="mailto: i.build.apps.4.u@gmail.com">:email:', unsafe_allow_html=True)
-
-
-available_models = {"ChatGPT-4": "gpt-4","ChatGPT-3.5": "gpt-3.5-turbo","GPT-3": "text-davinci-003",
-                        "GPT-3.5 Instruct": "gpt-3.5-turbo-instruct","Code Llama":"CodeLlama-34b-Instruct-hf"}
+available_models = {"ChatGPT-4": "gpt-4",
+                        "GPT-3.5 Instruct": "gpt-3.5-turbo-instruct"}
 
 # List to hold datasets
 if "datasets" not in st.session_state:
@@ -43,8 +33,7 @@ else:
     datasets = st.session_state["datasets"]
 
 key_col1,key_col2 = st.columns(2)
-openai_key = key_col1.text_input(label = ":key: OpenAI Key:", help="Required for ChatGPT-4, ChatGPT-3.5, GPT-3, GPT-3.5 Instruct.",type="password")
-hf_key = key_col2.text_input(label = ":hugging_face: HuggingFace Key:",help="Required for Code Llama", type="password")
+openai_key = key_col1.text_input(label = ":key: OpenAI Key:", help="Required for ChatGPT-4, GPT-3.5 Instruct.",type="password")
 
 with st.sidebar:
     # First we want to choose the dataset, but we will fill it with choices once we've loaded one
@@ -92,10 +81,6 @@ if go_btn and model_count > 0:
         if not openai_key.startswith('sk-'):
             st.error("Please enter a valid OpenAI API key.")
             api_keys_entered = False
-    if "Code Llama" in selected_models:
-        if not hf_key.startswith('hf_'):
-            st.error("Please enter a valid HuggingFace API key.")
-            api_keys_entered = False
     if api_keys_entered:
         # Place for plots depending on how many models
         plots = st.columns(model_count)
@@ -110,7 +95,7 @@ if go_btn and model_count > 0:
                     question_to_ask = format_question(primer1, primer2, question, model_type)   
                     # Run the question
                     answer=""
-                    answer = run_request(question_to_ask, available_models[model_type], key=openai_key,alt_key=hf_key)
+                    answer = run_request(question_to_ask, available_models[model_type], key=openai_key)
                     # the answer is the completed Python script so add to the beginning of the script to it.
                     answer = primer2 + answer
                     print("Model: " + model_type)
